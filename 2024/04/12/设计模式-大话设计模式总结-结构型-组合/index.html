@@ -19,23 +19,30 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta property="og:type" content="website">
-<meta property="og:title" content="徐麟家的博客">
-<meta property="og:url" content="http://example.com/archives/page/2/index.html">
+    <meta name="description" content="点评 使用组合模式的一个特点是当你目标需求中有层次式的结构。有部分和整体的区别时，希望忽略组合和对象的不同，可以考虑使用组合模式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式-大话设计模式总结-结构型-&gt;组合">
+<meta property="og:url" content="http://example.com/2024/04/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93-%E7%BB%93%E6%9E%84%E5%9E%8B-%E7%BB%84%E5%90%88/index.html">
 <meta property="og:site_name" content="徐麟家的博客">
+<meta property="og:description" content="点评 使用组合模式的一个特点是当你目标需求中有层次式的结构。有部分和整体的区别时，希望忽略组合和对象的不同，可以考虑使用组合模式。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/04/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93-%E7%BB%93%E6%9E%84%E5%9E%8B-%E7%BB%84%E5%90%88/%E7%BB%93%E6%9E%84%E5%9E%8B-%E7%BB%84%E5%90%88.png">
+<meta property="article:published_time" content="2024-04-12T06:25:29.000Z">
+<meta property="article:modified_time" content="2024-04-12T07:13:19.820Z">
 <meta property="article:author" content="xulinjia">
+<meta property="article:tag" content="设计模式总结">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/04/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93-%E7%BB%93%E6%9E%84%E5%9E%8B-%E7%BB%84%E5%90%88/%E7%BB%93%E6%9E%84%E5%9E%8B-%E7%BB%84%E5%90%88.png">
 
 
-<link rel="canonical" href="http://example.com/archives/page/2/">
+<link rel="canonical" href="http://example.com/2024/04/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93-%E7%BB%93%E6%9E%84%E5%9E%8B-%E7%BB%84%E5%90%88/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"archives/page/2/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/04/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93-%E7%BB%93%E6%9E%84%E5%9E%8B-%E7%BB%84%E5%90%88/","path":"2024/04/12/设计模式-大话设计模式总结-结构型-组合/","title":"设计模式-大话设计模式总结-结构型->组合"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>归档 | 徐麟家的博客</title>
+<title>设计模式-大话设计模式总结-结构型->组合 | 徐麟家的博客</title>
   
 
 
@@ -68,7 +75,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">徐麟家的博客</h1>
+      <p class="site-title">徐麟家的博客</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">站在巨人的肩膀上</p>
@@ -95,7 +102,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -108,6 +115,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">点评</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -147,155 +155,113 @@
 
     </div>
 
-    <div class="main-inner archive posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
-  
-  
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <span class="collection-header">嗯..! 目前共计 16 篇日志。 继续努力。</span>
-      </div>
 
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93-%E7%BB%93%E6%9E%84%E5%9E%8B-%E7%BB%84%E5%90%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xulinjia">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="徐麟家的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="设计模式-大话设计模式总结-结构型->组合 | 徐麟家的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          设计模式-大话设计模式总结-结构型->组合
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2024</span>
+
+      <time title="创建时间：2024-04-12 14:25:29 / 修改时间：15:13:19" itemprop="dateCreated datePublished" datetime="2024-04-12T14:25:29+08:00">2024-04-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B/" itemprop="url" rel="index"><span itemprop="name">结构型</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><img src="/2024/04/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93-%E7%BB%93%E6%9E%84%E5%9E%8B-%E7%BB%84%E5%90%88/%E7%BB%93%E6%9E%84%E5%9E%8B-%E7%BB%84%E5%90%88.png" class="">
+
+<h3>点评</h3>
+使用组合模式的一个特点是当你目标需求中有层次式的结构。有部分和整体的区别时，希望忽略组合和对象的不同，可以考虑使用组合模式。
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2024-04-02T22:59:47+08:00"
-              content="2024-04-02">
-          04-02
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-        <a class="post-title-link" href="/2024/04/02/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%88%9B%E5%BB%BA%E5%9E%8B-%E5%B7%A5%E5%8E%82/" itemprop="url">
-          <span itemprop="name">设计模式-大话设计模式总结-创建型->工厂</span>
-        </a>
-      </div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/" rel="tag"># 设计模式总结</a>
+          </div>
 
-      
-    </header>
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93-%E7%BB%93%E6%9E%84%E5%9E%8B-%E8%A3%85%E9%A5%B0/" rel="prev" title="设计模式-大话设计模式总结-结构型->装饰">
+                  <i class="fa fa-angle-left"></i> 设计模式-大话设计模式总结-结构型->装饰
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2024-04-02T00:33:57+08:00"
-              content="2024-04-02">
-          04-02
-        </time>
-      </div>
-
-      <div class="post-title">
-        <a class="post-title-link" href="/2024/04/02/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-6%E5%A4%A7%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" itemprop="url">
-          <span itemprop="name">设计模式-大话设计模式总结->6大设计原则</span>
-        </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2024-03-28T22:06:39+08:00"
-              content="2024-03-28">
-          03-28
-        </time>
-      </div>
-
-      <div class="post-title">
-        <a class="post-title-link" href="/2024/03/28/%E6%B8%B8%E6%88%8F%E4%BC%98%E5%8C%96%E5%9F%BA%E6%9C%AC%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87%E4%BB%A5%E5%8F%8A%E8%AF%B4%E6%98%8E/" itemprop="url">
-          <span itemprop="name">游戏优化基本性能指标以及说明</span>
-        </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2024-01-20T01:09:47+08:00"
-              content="2024-01-20">
-          01-20
-        </time>
-      </div>
-
-      <div class="post-title">
-        <a class="post-title-link" href="/2024/01/20/%E7%AE%97%E6%B3%95-%E5%A0%86%E6%8E%92%E5%BA%8F-%E6%9C%80%E5%B0%8F%E5%A0%86/" itemprop="url">
-          <span itemprop="name">算法-堆排序-最小堆</span>
-        </a>
-      </div>
-
-      
-    </header>
-  </article>
-    <div class="collection-year">
-      <span class="collection-header">2023</span>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-12-14T13:18:48+08:00"
-              content="2023-12-14">
-          12-14
-        </time>
-      </div>
-
-      <div class="post-title">
-        <a class="post-title-link" href="/2023/12/14/%E7%AE%97%E6%B3%95-%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" itemprop="url">
-          <span itemprop="name">算法-快速排序</span>
-        </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-09-13T13:01:10+08:00"
-              content="2023-09-13">
-          09-13
-        </time>
-      </div>
-
-      <div class="post-title">
-        <a class="post-title-link" href="/2023/09/13/UGUI%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%B2%BE%E8%A6%81-%E4%B8%80/" itemprop="url">
-          <span itemprop="name">UGUI事件系统精要(一)-事件处理流程</span>
-        </a>
-      </div>
-
-      
-    </header>
-  </article>
+</div>
 
 
-    </div>
-  </div>
-  
-  
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/archives/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span>
-  </nav>
+
+
+
 
 </div>
   </main>
