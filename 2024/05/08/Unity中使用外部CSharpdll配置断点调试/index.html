@@ -22,27 +22,22 @@
     <meta name="description" content="本文总结个人使用unity调试第三方库的些许经验 解释关于dll，pdb，mdb的概念 dll: DLL（Dynamic Link Library）是一种微软Windows操作系统中常见的文件类型，它包含了一系列的可执行代码以及数据，这些代码和数据可以被其他程序调用和使用。 DLL文件通常包含了一个或多个函数、数据、类、资源等，这些可以被其他程序使用。与静态链接库（Static Link Libr">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unity中使用外部C#dll配置断点调试">
-<meta property="og:url" content="http://example.com/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8C-dll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/index.html">
+<meta property="og:url" content="http://example.com/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8CSharpdll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/index.html">
 <meta property="og:site_name" content="徐麟家的博客">
 <meta property="og:description" content="本文总结个人使用unity调试第三方库的些许经验 解释关于dll，pdb，mdb的概念 dll: DLL（Dynamic Link Library）是一种微软Windows操作系统中常见的文件类型，它包含了一系列的可执行代码以及数据，这些代码和数据可以被其他程序调用和使用。 DLL文件通常包含了一个或多个函数、数据、类、资源等，这些可以被其他程序使用。与静态链接库（Static Link Libr">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8C-dll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/portable_pdb.png">
-<meta property="og:image" content="http://example.com/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8C-dll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/dll.png">
-<meta property="og:image" content="http://example.com/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8C-dll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/assets.png">
-<meta property="og:image" content="http://example.com/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8C-dll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/debug.png">
 <meta property="article:published_time" content="2024-05-08T07:33:46.000Z">
 <meta property="article:modified_time" content="2024-05-08T08:59:40.694Z">
 <meta property="article:author" content="xulinjia">
 <meta property="article:tag" content="杂项">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8C-dll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/portable_pdb.png">
 
 
-<link rel="canonical" href="http://example.com/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8C-dll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/">
+<link rel="canonical" href="http://example.com/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8CSharpdll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8C-dll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/","path":"2024/05/08/Unity中使用外部C-dll配置断点调试/","title":"Unity中使用外部C#dll配置断点调试"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8CSharpdll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/","path":"2024/05/08/Unity中使用外部CSharpdll配置断点调试/","title":"Unity中使用外部C#dll配置断点调试"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>Unity中使用外部C#dll配置断点调试 | 徐麟家的博客</title>
@@ -131,7 +126,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -169,7 +164,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8C-dll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8CSharpdll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -263,15 +258,15 @@ PDB（Program Database）是微软.NET编译器产生的调试信息文件，通
 <h5>在unity中使用pdb特别注意点</h5>
 在unity中使用的pdb要求是便携的pdb文件，如果使用通常意义的pdb，unity是没有办法读取的。会有如下警告图示，无法读取源程序符号信息。
 Unity is only able to load mdb or portable-pdb symbols. Assets/GameFramework/Libraries/GameFramework.pdb is using a legacy pdb format.
-<img src="/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8C-dll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/portable_pdb.png" class="">
+
 我们可以通过修改dll库源代码（当然是需要有源码，或者已经提供配套的pdb文件）编译器选项解决这个问题。调试信息选择可移植，如下图：
-<img src="/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8C-dll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/dll.png" class="">
+
 
 <h3>实操</h3>
 按以上方法生成好pdb文件一并放入unity资产目录中（任意Assets目录下）。
-<img src="/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8C-dll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/assets.png" class="">
+
 断点调试截图：
-<img src="/2024/05/08/Unity%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8C-dll%E9%85%8D%E7%BD%AE%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95/debug.png" class="">
+
 
 
 
@@ -297,6 +292,9 @@ Unity is only able to load mdb or portable-pdb symbols. Assets/GameFramework/Lib
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2024/05/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93-%E8%A1%8C%E4%B8%BA%E5%9E%8B-%E7%8A%B6%E6%80%81/" rel="next" title="设计模式-大话设计模式总结-行为型->状态">
+                  设计模式-大话设计模式总结-行为型->状态 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
