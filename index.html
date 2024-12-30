@@ -120,7 +120,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -148,6 +148,240 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/12/20/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E6%8B%93%E5%B1%95ScrollRect%E8%87%AA%E5%8A%A8%E5%8F%AF%E5%90%A6%E6%8B%96%E5%8A%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xulinjia">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="徐麟家的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 徐麟家的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/12/20/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E6%8B%93%E5%B1%95ScrollRect%E8%87%AA%E5%8A%A8%E5%8F%AF%E5%90%A6%E6%8B%96%E5%8A%A8/" class="post-title-link" itemprop="url">UGUI源码分析-拓展ScrollRect自动可否拖动</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-20 19:51:30" itemprop="dateCreated datePublished" datetime="2024-12-20T19:51:30+08:00">2024-12-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-25 13:48:05" itemprop="dateModified" datetime="2024-12-25T13:48:05+08:00">2024-12-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Unity/" itemprop="url" rel="index"><span itemprop="name">Unity</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Unity/UGUI/" itemprop="url" rel="index"><span itemprop="name">UGUI</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>291</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="1-本文内容概述"><a href="#1-本文内容概述" class="headerlink" title="1.本文内容概述"></a>1.本文内容概述</h2><p>拓展ScrollRect组件相关内容，当ScrollRect的Conenct没有超过ScrollRect的大小不需要拖动；否则，可拖动。</p>
+<h2 id="2-代码分析"><a href="#2-代码分析" class="headerlink" title="2.代码分析"></a>2.代码分析</h2><pre><code>代码需要比较 ScrollRect的sizeDelta和Content的sizeDelta进行比较。当Content的宽度（高度）大于Content的宽度（高度）时，则需要拖动;反之亦反。
+监听UIBehaviour.OnRectTransformDimensionsChange事件，当Context发生改变需要重置。
+</code></pre>
+<h2 id="3-代码展示"><a href="#3-代码展示" class="headerlink" title="3.代码展示"></a>3.代码展示</h2><figure class="highlight csharp"><figcaption><span>UIScrollDragAdapter.cs</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> UnityEngine.EventSystems;</span><br><span class="line"><span class="keyword">using</span> UnityEngine.UI;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">Rainbow.UI</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 根据Context的bounds，自动判断ScrollRect 是否可以滑动！当检测的几何框大小发生变化的时候会重新计算</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 以Vertical为例当高度小于ScrollRect的高度，锁定垂直方向上的滑动</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> *要点1、必须挂在需要检测RectTransform变化的GameObject上 Content上</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> *要点2、设置 scrollRect</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> *要点3、设置 dragDir</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    [<span class="meta">RequireComponent(typeof(RectTransform))</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">UIScrollDragAdapter</span> : <span class="title">UIBehaviour</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">public</span> ScrollRect scrollRect;</span><br><span class="line">        <span class="keyword">public</span> DragDir dragDir;</span><br><span class="line">        RectTransform rectTransform;</span><br><span class="line">        RectTransform scrollRectTransform;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">enum</span> DragDir</span><br><span class="line">        &#123;</span><br><span class="line">            Vertical,</span><br><span class="line">            Horizontal,</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            rectTransform = GetComponent&lt;RectTransform&gt;();</span><br><span class="line">            <span class="keyword">if</span> (scrollRect != <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                scrollRectTransform = scrollRect.GetComponent&lt;RectTransform&gt;();</span><br><span class="line">            &#125;</span><br><span class="line">            OnRectTransformDimensionsChange();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnRectTransformDimensionsChange</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (rectTransform == <span class="literal">null</span> || scrollRectTransform == <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            Bounds bounds = RectTransformUtility.CalculateRelativeRectTransformBounds(scrollRectTransform, rectTransform);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (dragDir == DragDir.Vertical)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="built_in">bool</span> dragv = bounds.size.y &gt; scrollRectTransform.sizeDelta.y;</span><br><span class="line">                scrollRect.vertical = dragv;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (dragDir == DragDir.Horizontal)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="built_in">bool</span> dragh = bounds.size.x &gt; scrollRectTransform.sizeDelta.x;</span><br><span class="line">                scrollRect.horizontal = dragh;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="4-效果演示"><a href="#4-效果演示" class="headerlink" title="4.效果演示"></a>4.效果演示</h2><img src="/2024/12/20/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E6%8B%93%E5%B1%95ScrollRect%E8%87%AA%E5%8A%A8%E5%8F%AF%E5%90%A6%E6%8B%96%E5%8A%A8/p1.png" class="" width="1200">
+<img src="/2024/12/20/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E6%8B%93%E5%B1%95ScrollRect%E8%87%AA%E5%8A%A8%E5%8F%AF%E5%90%A6%E6%8B%96%E5%8A%A8/p2.gif" class="">
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/10/23/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E6%8B%93%E5%B1%95Button%E7%82%B9%E5%87%BB%E7%BC%A9%E6%94%BE%E5%8A%9F%E8%83%BD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xulinjia">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="徐麟家的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 徐麟家的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/10/23/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E6%8B%93%E5%B1%95Button%E7%82%B9%E5%87%BB%E7%BC%A9%E6%94%BE%E5%8A%9F%E8%83%BD/" class="post-title-link" itemprop="url">UGUI源码分析-拓展Button点击缩放功能</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-10-23 13:14:22" itemprop="dateCreated datePublished" datetime="2024-10-23T13:14:22+08:00">2024-10-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-30 13:40:20" itemprop="dateModified" datetime="2024-12-30T13:40:20+08:00">2024-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Unity/" itemprop="url" rel="index"><span itemprop="name">Unity</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Unity/UGUI/" itemprop="url" rel="index"><span itemprop="name">UGUI</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>496</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="1-本文内容概述"><a href="#1-本文内容概述" class="headerlink" title="1.本文内容概述"></a>1.本文内容概述</h1><p>主要分析下UGUI-Button的一些源码，分析点击效果如何实现的效果的细节。添加一个拓展实现缩放功能（DoTween插件实现的），并且增加一个ScaleButton的编辑器脚本<br>和一个快捷创建按钮的页签。</p>
+<hr>
+<h2 id="2-Button按钮的代码分析"><a href="#2-Button按钮的代码分析" class="headerlink" title="2.Button按钮的代码分析"></a>2.Button按钮的代码分析</h2><p>Button的效果主要是Selectable类的DoStateTransition(SelectionState state, bool instant)方法控制状态的切换。</p>
+<figure class="highlight csharp"><figcaption><span>Selectable.cs</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="built_in">enum</span> SelectionState</span><br><span class="line">&#123;</span><br><span class="line">    Normal,         <span class="comment">// 默认状态</span></span><br><span class="line">    Highlighted,    <span class="comment">//鼠标悬浮</span></span><br><span class="line">    Pressed,        <span class="comment">//点击</span></span><br><span class="line">    Selected,       <span class="comment">//选中</span></span><br><span class="line">    Disabled        <span class="comment">//禁用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们只要实现这个方法，对应状态做对应的变化就行。</p>
+<h2 id="3-如何实现点击动画效果"><a href="#3-如何实现点击动画效果" class="headerlink" title="3.如何实现点击动画效果"></a>3.如何实现点击动画效果</h2><pre><code>使用doTween会让我们的工作变得简单。这里使用dotween的插件来做一个简单的缩放功能。
+</code></pre>
+<hr>
+<h2 id="4-实现一个按钮缩放的功能的按钮–UIScaleButton"><a href="#4-实现一个按钮缩放的功能的按钮–UIScaleButton" class="headerlink" title="4.实现一个按钮缩放的功能的按钮–UIScaleButton"></a>4.实现一个按钮缩放的功能的按钮–UIScaleButton</h2><p>基于上面的分析我们创建UIScaleButton，重写DoStateTransition方法。<br><strong>注意在OnDestroy时对Dotween进行删除</strong></p>
+<figure class="highlight csharp"><figcaption><span>UIScaleButton.cs</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Collections;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> UnityEngine.EventSystems;</span><br><span class="line"><span class="keyword">using</span> UnityEngine.UI;</span><br><span class="line"><span class="keyword">using</span> DG.Tweening;</span><br><span class="line"><span class="keyword">using</span> Unity.VisualScripting;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">Rainbow.UI</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">UIScaleButton</span> : <span class="title">Button</span></span><br><span class="line">    &#123;</span><br><span class="line">        [<span class="meta">SerializeField</span>]</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">float</span> m_ScaleUp = <span class="number">1f</span>;</span><br><span class="line">        [<span class="meta">SerializeField</span>]</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">float</span> m_ScaleDown = <span class="number">0.95f</span>;</span><br><span class="line">        [<span class="meta">SerializeField</span>]</span><br><span class="line">        Transform m_Target;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="built_in">float</span> transScale = <span class="number">1f</span>;</span><br><span class="line"></span><br><span class="line">        Tween tween;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">DoStateTransition</span>(<span class="params">SelectionState state, <span class="built_in">bool</span> instant</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">base</span>.DoStateTransition(state, instant);</span><br><span class="line">            <span class="keyword">switch</span> (state)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">case</span> SelectionState.Normal:</span><br><span class="line">                    transScale = m_ScaleUp;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> SelectionState.Pressed:</span><br><span class="line">                    transScale = m_ScaleDown;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="literal">default</span>:</span><br><span class="line">                    transScale = m_ScaleUp;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            DoScale();</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">DoScale</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            Transform tweenTrans = m_Target ? m_Target : transform;</span><br><span class="line">            tween = tweenTrans.DOScale(Vector3.one * transScale, <span class="number">0.3f</span>).SetEase(Ease.OutBack);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnDestroy</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">base</span>.OnDestroy();</span><br><span class="line">            tween.Kill();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>另外为UIScaleButton添加一个编辑器脚本。</p>
+<figure class="highlight csharp"><figcaption><span>UIScaleButtonEditor.cs</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEditor;</span><br><span class="line"><span class="keyword">using</span> UnityEditor.UI;</span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">Rainbow.UI</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">CustomEditor(typeof(UIScaleButton))</span>]</span><br><span class="line">    [<span class="meta">DisallowMultipleComponent</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">UIScaleButtonEditor</span> : <span class="title">ButtonEditor</span></span><br><span class="line">    &#123;</span><br><span class="line">        SerializedProperty m_ScaleUpProperty;</span><br><span class="line">        SerializedProperty m_ScaleDownProperty;</span><br><span class="line">        SerializedProperty m_TargetProperty;</span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnEnable</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">base</span>.OnEnable();</span><br><span class="line">            m_ScaleUpProperty = serializedObject.FindProperty(<span class="string">&quot;m_ScaleUp&quot;</span>);</span><br><span class="line">            m_ScaleDownProperty = serializedObject.FindProperty(<span class="string">&quot;m_ScaleDown&quot;</span>);</span><br><span class="line">            m_TargetProperty = serializedObject.FindProperty(<span class="string">&quot;m_Target&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnInspectorGUI</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">base</span>.OnInspectorGUI();</span><br><span class="line">            serializedObject.Update();</span><br><span class="line">            EditorGUILayout.PropertyField(m_ScaleUpProperty);</span><br><span class="line">            EditorGUILayout.PropertyField(m_ScaleDownProperty);</span><br><span class="line">            EditorGUILayout.PropertyField(m_TargetProperty);</span><br><span class="line">            serializedObject.ApplyModifiedProperties();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>添加一个快捷创建UIScaleButton的选项。</p>
+<figure class="highlight csharp"><figcaption><span>UGUIExt_CreateObjectMenu.cs</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> TMPro.EditorUtilities;</span><br><span class="line"><span class="keyword">using</span> UnityEditor;</span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> UnityEngine.UI;</span><br><span class="line"><span class="keyword">namespace</span> <span class="title">Rainbow.UI</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">UGUIExt_CreateObjectMenu</span> </span><br><span class="line">    &#123;</span><br><span class="line">        [<span class="meta">MenuItem(<span class="string">&quot;GameObject/UI/ScaleButton - TextMeshPro&quot;</span>, false, 2031)</span>]</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">AddButton</span>(<span class="params">MenuCommand menuCommand</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            TMPro_CreateObjectMenu.AddButton(menuCommand);</span><br><span class="line">           </span><br><span class="line">            <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; Selection.gameObjects.Length; i++)</span><br><span class="line">            &#123;</span><br><span class="line">                 <span class="built_in">string</span> selectName = Selection.gameObjects[i].name;</span><br><span class="line">                 <span class="keyword">if</span>(selectName == <span class="string">&quot;Button&quot;</span>)</span><br><span class="line">                 &#123; </span><br><span class="line">                    GameObject tg = Selection.gameObjects[i];</span><br><span class="line">                    tg.name = <span class="string">&quot;UIScaleButton&quot;</span>;</span><br><span class="line">                    GameObject.DestroyImmediate(tg.GetComponent&lt;Button&gt;());</span><br><span class="line">                    tg.AddComponent&lt;UIScaleButton&gt;();</span><br><span class="line">                 &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-效果"><a href="#4-效果" class="headerlink" title="4.效果"></a>4.效果</h2><img src="/2024/10/23/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E6%8B%93%E5%B1%95Button%E7%82%B9%E5%87%BB%E7%BC%A9%E6%94%BE%E5%8A%9F%E8%83%BD/ScaleBtn1.gif" class="">
+<img src="/2024/10/23/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E6%8B%93%E5%B1%95Button%E7%82%B9%E5%87%BB%E7%BC%A9%E6%94%BE%E5%8A%9F%E8%83%BD/ScaleBtn2.png" class="">
+<img src="/2024/10/23/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E6%8B%93%E5%B1%95Button%E7%82%B9%E5%87%BB%E7%BC%A9%E6%94%BE%E5%8A%9F%E8%83%BD/ScaleBtn3.png" class="">
+<h2 id="5分享源码库地址"><a href="#5分享源码库地址" class="headerlink" title="5分享源码库地址"></a>5<em>分享源码库地址</em></h2>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -193,7 +427,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-08-21 10:10:28" itemprop="dateModified" datetime="2024-08-21T10:10:28+08:00">2024-08-21</time>
+      <time title="修改时间：2024-12-25 12:18:45" itemprop="dateModified" datetime="2024-12-25T12:18:45+08:00">2024-12-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -237,7 +471,7 @@
           <p>unity使用packageManger方式创建需要依赖代码包。对我们想研究查看和修改UGUI源码很不方便，故想搭建一个可调试，修改UGUI源码的的unity工程。当然再实际开发中我们并不建议直接修改源码！</p>
 <h2 id="如何创建一个可调试可修改的UGUI源码工程？"><a href="#如何创建一个可调试可修改的UGUI源码工程？" class="headerlink" title="如何创建一个可调试可修改的UGUI源码工程？"></a><em>如何创建一个可调试可修改的UGUI源码工程？</em></h2><ol>
 <li>创建一个unity工程<img src="/2024/08/20/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA1.png" class=""></li>
-<li>等初始化完毕后拷贝UGUI_CodeAnalyse&#x2F;Library&#x2F;PackageCache&#x2F;<a href="mailto:&#99;&#x6f;&#109;&#x2e;&#x75;&#110;&#x69;&#116;&#x79;&#x2e;&#117;&#x67;&#x75;&#105;&#x40;&#49;&#46;&#48;&#46;&#x30;">&#99;&#x6f;&#109;&#x2e;&#x75;&#110;&#x69;&#116;&#x79;&#x2e;&#117;&#x67;&#x75;&#105;&#x40;&#49;&#46;&#48;&#46;&#x30;</a>文件夹至UGUI_CodeAnalyse&#x2F;Packages&#x2F;<a href="mailto:&#x63;&#x6f;&#109;&#x2e;&#117;&#110;&#x69;&#116;&#x79;&#46;&#117;&#x67;&#117;&#105;&#64;&#49;&#46;&#x30;&#46;&#x30;">&#x63;&#x6f;&#109;&#x2e;&#117;&#110;&#x69;&#116;&#x79;&#46;&#117;&#x67;&#117;&#105;&#64;&#49;&#46;&#x30;&#46;&#x30;</a>，请看下图<img src="/2024/08/20/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA2.png" class="">
+<li>等初始化完毕后拷贝UGUI_CodeAnalyse&#x2F;Library&#x2F;PackageCache&#x2F;<a href="mailto:&#99;&#x6f;&#109;&#x2e;&#117;&#x6e;&#x69;&#x74;&#x79;&#46;&#x75;&#103;&#x75;&#x69;&#x40;&#49;&#x2e;&#x30;&#46;&#48;">&#99;&#x6f;&#109;&#x2e;&#117;&#x6e;&#x69;&#x74;&#x79;&#46;&#x75;&#103;&#x75;&#x69;&#x40;&#49;&#x2e;&#x30;&#46;&#48;</a>文件夹至UGUI_CodeAnalyse&#x2F;Packages&#x2F;<a href="mailto:&#x63;&#x6f;&#109;&#x2e;&#x75;&#110;&#105;&#x74;&#121;&#46;&#117;&#x67;&#117;&#105;&#64;&#49;&#x2e;&#48;&#46;&#x30;">&#x63;&#x6f;&#109;&#x2e;&#x75;&#110;&#105;&#x74;&#121;&#46;&#117;&#x67;&#117;&#105;&#64;&#49;&#x2e;&#48;&#46;&#x30;</a>，请看下图<img src="/2024/08/20/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA2.png" class="">
 <img src="/2024/08/20/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA3.png" class=""></li>
 <li>测试，脚本编辑器打开修改Button.cs中的Press()方法。<img src="/2024/08/20/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA4.png" class=""></li>
 <li>scene中创建一个按钮，点击按钮，打印出日志”Hi I click”。<img src="/2024/08/20/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA5.png" class=""></li>
@@ -1081,223 +1315,6 @@ C#中foreach语法糖，会被编译器实现未一个while循环语法，以访
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/06/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93-%E8%A1%8C%E4%B8%BA%E5%9E%8B-%E7%AD%96%E7%95%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xulinjia">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="徐麟家的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 徐麟家的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93-%E8%A1%8C%E4%B8%BA%E5%9E%8B-%E7%AD%96%E7%95%A5/" class="post-title-link" itemprop="url">设计模式-大话设计模式总结-行为型->策略</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-06-12 08:21:17" itemprop="dateCreated datePublished" datetime="2024-06-12T08:21:17+08:00">2024-06-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-08-21 09:34:13" itemprop="dateModified" datetime="2024-08-21T09:34:13+08:00">2024-08-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B/" itemprop="url" rel="index"><span itemprop="name">行为型</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>265</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <img src="/2024/06/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93-%E8%A1%8C%E4%B8%BA%E5%9E%8B-%E7%AD%96%E7%95%A5/%E8%A1%8C%E4%B8%BA%E5%9E%8B2-%E7%AD%96%E7%95%A5.png" class="">
-<h3>点评</h3>
-策略模式是一种定义一系列算法的方法，从概念上来看，所有这些算法完成的都是相同的工作，只是实现不同，它可以以相同的方式调用所有的算法，减少了各种算法类与使用算法类之间的耦合。<br>
-策略模式的Strategy类层次为Context定义了一系列的可供重用的算法或行为。继承有助于析取出这些算法中的公共功能。<br>
-策略模式就是用来封装算法的，但在实践中，我们发现可以用它来封装几乎任何类型的规则，只要在分析过程中听到需要在不同时间应用不同的业务规则，就可以考虑使用策略模式处理这种变化的可能性。<br>
-在基本的策略模式中，选择所用具体实现的职责由客户端对象承担，并转给策略模式的Context对象。
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/05/29/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93-%E8%A1%8C%E4%B8%BA%E5%9E%8B-%E5%A4%87%E5%BF%98%E5%BD%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xulinjia">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="徐麟家的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 徐麟家的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/29/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93-%E8%A1%8C%E4%B8%BA%E5%9E%8B-%E5%A4%87%E5%BF%98%E5%BD%95/" class="post-title-link" itemprop="url">设计模式-大话设计模式总结-行为型->备忘录</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-05-29 16:52:14" itemprop="dateCreated datePublished" datetime="2024-05-29T16:52:14+08:00">2024-05-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-08-21 09:34:19" itemprop="dateModified" datetime="2024-08-21T09:34:19+08:00">2024-08-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B/" itemprop="url" rel="index"><span itemprop="name">行为型</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>363</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <img src="/2024/05/29/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93-%E8%A1%8C%E4%B8%BA%E5%9E%8B-%E5%A4%87%E5%BF%98%E5%BD%95/%E8%A1%8C%E4%B8%BA%E5%9E%8B2-%E5%A4%87%E5%BF%98%E5%BD%95.png" class="">
-<p>Originator（发起人）：负责创建一个备忘录Memento，用以记录当前时刻它的内部状态，并可使用备忘录恢复内部状态。Originator可根据需要决定Memento存储Originator的哪些内部状态。</br><br>Memento（备忘录）：负责存储Originator对象的内部状态，并可防止Originator以外的其他对象访问备忘录Memento。备忘录有两个接口，Caretaker只能看到备忘录的窄接口，它只能将备忘录传递给其他对象。Originator能够看到一个宽接口，允许它访问返回到先前状态所需的所有数据。</br><br>Caretaker（管理者）：负责保存好备忘录Memento，不能对备忘录的内容进行操作或检查</br></p>
-<h6>
-命令模式可以使用备忘录模式来存储可撤销操作的状态[DP]。有时一些对象的内部信息必须保存在对象以外的地方，但是必须要由对象自己读取，这时，使用备忘录可以把复杂的对象内部信息对其他的对象屏蔽起来[DP]，从而可以恰当地保持封装的边界。
-</h6>
-<h3>点评</h3>
-备忘录模式很好的展示单一职责。程序设计中注重的边界，合理组织类功能的协作，对未来程序的拓展和使用有着至关重要的的影响！
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
@@ -1329,7 +1346,7 @@ C#中foreach语法糖，会被编译器实现未一个while循环语法，以访
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">42 分钟</span>
+    <span title="站点阅读时长">45 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">
