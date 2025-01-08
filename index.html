@@ -187,7 +187,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-01-04 12:49:44 / 修改时间：13:41:38" itemprop="dateCreated datePublished" datetime="2025-01-04T12:49:44+08:00">2025-01-04</time>
+      <time title="创建时间：2025-01-04 12:49:44 / 修改时间：13:47:09" itemprop="dateCreated datePublished" datetime="2025-01-04T12:49:44+08:00">2025-01-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -210,7 +210,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>540</span>
+      <span>536</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -228,17 +228,18 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="什么是DrawCall？"><a href="#什么是DrawCall？" class="headerlink" title="什么是DrawCall？"></a><em><strong>什么是DrawCall？</strong></em></h3><pre><code>drawcall是渲染一个物体所需要的指令集，由CPU像GPU发送，drawcall中会包含GUP渲染物体所需的，如模型顶点数据，法线，纹理贴图等等渲染相关数据。cpu在发送指令期间是不能做其他事情的，这就形成主要的性能瓶颈之一。
+          <h3 id="什么是DrawCall？"><a href="#什么是DrawCall？" class="headerlink" title="什么是DrawCall？"></a><em><strong>什么是DrawCall？</strong></em></h3><pre><code>drawcall是渲染一个物体所需要的指令集，由CPU像GPU发送，drawcall中会包含GUP渲染物体所的，  
+如模型顶点数据，法线，纹理贴图等等渲染相关数据。cpu在发送指令期间是不能做其他事情的，这就形成主要的性能瓶颈之一。
 </code></pre>
-<h3 id="什么是Batching？"><a href="#什么是Batching？" class="headerlink" title="什么是Batching？"></a><em><strong>什么是Batching？</strong></em></h3><pre><code>由于太多的drawcall，自然会有降低drawcall的说法。这种技术在unity中称为Batching，简单说就是通过一定的规则合并drawcall的技术，从而减少渲染调用的次数。
+<h3 id="什么是Batching？"><a href="#什么是Batching？" class="headerlink" title="什么是Batching？"></a><em><strong>什么是Batching？</strong></em></h3><pre><code>由于太多的drawcall，自然会有降低drawcall的说法。在unity中称为Batching，简单说就是通过一定的规则合并drawcall的技术，从而减少渲染调用的次数。
 </code></pre>
 <h3 id="介绍Unity中的主要Batching技术"><a href="#介绍Unity中的主要Batching技术" class="headerlink" title="介绍Unity中的主要Batching技术"></a>介绍Unity中的主要Batching技术</h3><ol>
-<li><p>Dynamic Batching：这是一种古老的技术，目前很多引擎都是支持的。主要的原理是合并通用相同材质（material）的小的网格（meshes）变成一个打的网格，替代原先的多个渲染调用。因此这项技术不适用网格顶点多的模型，比如球迷可能就需要谨慎考虑该技术了。 Static batching 的原理Dynamic Batching类似，只不过是在运行渲染前已经合并好，不像Dynamic是运行士即时合并的。</p>
+<li><p>Dynamic Batching：这是一种古老的技术，目前很多引擎都是支持的。主要的原理是合并通用相同材质（material）的小的网格（meshes）变成一个打的网格，替代原先的多个渲染调用。因此这项技术不适用网格顶点多的模型，比如球迷可能就需要谨慎考虑该技术了。 Static batching 的原理Dynamic Batching类似，只不过是在运行渲染前已经合并好，不像Dynamic是运行时即时合并的。</p>
 </li>
 <li><p>SRP Batcher：这是Unity 2017.1版本引入的新技术。SRP Batcher不会减少Drawcall调用而是把他们变得精简，它会缓存某些渲染状态（材质，颜色，顶点等等）到GPU的某块内存中。所以就没必要把每一个drawcall都发送给GUP。但是对shader编写需要遵循严格的结构规则。比如需要在属性声明中按如下约定规则的结构体。  </p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cbuffer UnityPerMaterial &#123;</span><br><span class="line">	<span class="type">float</span> _MainColor;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>GPU Instancing :单个drawcall一次渲染相同的网格（meshes）。需要把带渲染的数据包装成数组，一次性发送给GUP，GPU会遍历这个数组按照次序渲染所有的物体。当然shader的编写结构上会更加严格。在顶点和片元着色器上会多增加一个UNITY_VERTEX_INPUT_INSTANCE_ID，来对应数据块的内存位置。下面我写了个例子看渲染1000+个物体，使用GPU Instancing只需要3个drawcall。</p>
+<li><p>GPU Instancing :单个drawcall一次渲染相同的网格（meshes）。需要把带渲染的数据包装成数组，一次性发送给GUP，GPU会遍历这个数组按照次序渲染所有的物体。当然shader的编写结构上会更加严格。在顶点和片元着色器上会多增加一个UNITY_VERTEX_INPUT_INSTANCE_ID，用来对应数据块的内存位置。下面我写了个例子看渲染1000+个物体，使用GPU Instancing只需要3个drawcall。</p>
 </li>
 </ol>
 <img src="/2025/01/04/Rendering-drawcalls%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF/gpuInstance1.png" class="">
@@ -591,7 +592,7 @@
           <p>unity使用packageManger方式创建需要依赖代码包。对我们想研究查看和修改UGUI源码很不方便，故想搭建一个可调试，修改UGUI源码的的unity工程。当然再实际开发中我们并不建议直接修改源码！</p>
 <h2 id="如何创建一个可调试可修改的UGUI源码工程？"><a href="#如何创建一个可调试可修改的UGUI源码工程？" class="headerlink" title="如何创建一个可调试可修改的UGUI源码工程？"></a><em>如何创建一个可调试可修改的UGUI源码工程？</em></h2><ol>
 <li>创建一个unity工程<img src="/2024/08/20/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA1.png" class=""></li>
-<li>等初始化完毕后拷贝UGUI_CodeAnalyse&#x2F;Library&#x2F;PackageCache&#x2F;<a href="mailto:&#99;&#111;&#109;&#x2e;&#117;&#x6e;&#x69;&#116;&#x79;&#46;&#117;&#x67;&#x75;&#105;&#64;&#49;&#46;&#x30;&#46;&#48;">&#99;&#111;&#109;&#x2e;&#117;&#x6e;&#x69;&#116;&#x79;&#46;&#117;&#x67;&#x75;&#105;&#64;&#49;&#46;&#x30;&#46;&#48;</a>文件夹至UGUI_CodeAnalyse&#x2F;Packages&#x2F;<a href="mailto:&#99;&#x6f;&#109;&#46;&#117;&#110;&#105;&#x74;&#121;&#46;&#117;&#103;&#x75;&#105;&#64;&#49;&#x2e;&#48;&#x2e;&#48;">&#99;&#x6f;&#109;&#46;&#117;&#110;&#105;&#x74;&#121;&#46;&#117;&#103;&#x75;&#105;&#64;&#49;&#x2e;&#48;&#x2e;&#48;</a>，请看下图<img src="/2024/08/20/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA2.png" class="">
+<li>等初始化完毕后拷贝UGUI_CodeAnalyse&#x2F;Library&#x2F;PackageCache&#x2F;<a href="mailto:&#x63;&#111;&#109;&#x2e;&#117;&#110;&#x69;&#x74;&#x79;&#x2e;&#x75;&#103;&#117;&#x69;&#x40;&#x31;&#46;&#x30;&#x2e;&#x30;">&#x63;&#111;&#109;&#x2e;&#117;&#110;&#x69;&#x74;&#x79;&#x2e;&#x75;&#103;&#117;&#x69;&#x40;&#x31;&#46;&#x30;&#x2e;&#x30;</a>文件夹至UGUI_CodeAnalyse&#x2F;Packages&#x2F;<a href="mailto:&#x63;&#111;&#109;&#46;&#117;&#110;&#105;&#x74;&#x79;&#46;&#117;&#103;&#x75;&#x69;&#64;&#x31;&#x2e;&#x30;&#46;&#48;">&#x63;&#111;&#109;&#46;&#117;&#110;&#105;&#x74;&#x79;&#46;&#117;&#103;&#x75;&#x69;&#64;&#x31;&#x2e;&#x30;&#46;&#48;</a>，请看下图<img src="/2024/08/20/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA2.png" class="">
 <img src="/2024/08/20/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA3.png" class=""></li>
 <li>测试，脚本编辑器打开修改Button.cs中的Press()方法。<img src="/2024/08/20/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA4.png" class=""></li>
 <li>scene中创建一个按钮，点击按钮，打印出日志”Hi I click”。<img src="/2024/08/20/UGUI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA5.png" class=""></li>
